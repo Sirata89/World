@@ -20,3 +20,7 @@ Data/System/Source/dataSources.local.xml
 Data/System/Source/.idea
 /.idea
 /.run
+/obj
+Class1.cs
+world.csproj
+koperdev.sln
