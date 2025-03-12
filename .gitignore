@@ -22,3 +22,5 @@ Data/System/Source/.idea
 /.run
 /obj
 Class1.cs
+Data/Data.bin
+Data/Data.hash

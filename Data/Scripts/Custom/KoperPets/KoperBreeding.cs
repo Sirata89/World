@@ -33,8 +33,10 @@ namespace Server.Custom.KoperPets
     public static class KoperBreeding
     {
         private static readonly Random random = new Random();
-        private static int breedingScalar = 20;
+        private static int breedingScalar = 20; // TODO add as configurable setting
         private static TimeSpan breedingCooldown = TimeSpan.FromMinutes(breedingScalar);
+        
+        public static TimeSpan BreedingCooldown { get { return breedingCooldown; } }
         private static int GetCategoryStart(int adjective)
         {
             if (adjective >= 0 && adjective <= 9) return 0;     // Strength
@@ -245,7 +247,7 @@ namespace Server.Custom.KoperPets
             if (petData == null) // Ensure pet data exists
                 return false;
 
-            if (DateTime.UtcNow - petData.LastBreedingTime < breedingCooldown) // Uses updated cooldown
+            if (DateTime.UtcNow - petData.LastBreedingTime < (breedingCooldown * (petData.Pedigree + 1))) // Uses updated cooldown
                 return false; // Cooldown active
 
             return true; // Breeding allowed
@@ -293,7 +295,7 @@ namespace Server.Custom.KoperPets
                 return TimeSpan.Zero;
 
             TimeSpan timeElapsed = DateTime.UtcNow - petData.LastBreedingTime;
-            TimeSpan remainingCooldown = TimeSpan.FromMinutes(breedingScalar) - timeElapsed;
+            TimeSpan remainingCooldown = TimeSpan.FromMinutes((breedingScalar * (petData.Pedigree +1))) - timeElapsed;
 
             return remainingCooldown > TimeSpan.Zero ? remainingCooldown : TimeSpan.Zero;
         }
