@@ -1,3 +1,20 @@
 Data/Logs
 Data/System/Source/obj
 throttle.log
+Saves
+Game
+Data/System/Source/bin
+﻿# Default ignored files
+Data/System/Source/shelf/
+Data/System/Source/workspace.xml
+# Rider ignored files
+Data/System/Source/.idea.World.iml
+Data/System/Source/contentModel.xml
+Data/System/Source/projectSettingsUpdater.xml
+Data/System/Source/modules.xml
+# Editor-based HTTP Client requests
+Data/System/Source/httpRequests/
+# Datasource local storage ignored files
+Data/System/Source/dataSources/
+Data/System/Source/dataSources.local.xml
+Data/System/Source/.idea
