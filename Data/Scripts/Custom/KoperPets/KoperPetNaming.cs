@@ -6,9 +6,33 @@ using System.Collections.Generic;
 
 namespace Server.Custom.KoperPets
 {
+    public enum AdjectiveCategory
+    {
+        Strength,
+        Dexterity,
+        Magic,
+        Tanky,
+        Damage,
+        Elemental,
+        Mythical,
+        Cursed
+    }
     public static class KoperPetNaming
     {
+        
         private static readonly Random getrandom = new Random();
+        private static readonly Dictionary<AdjectiveCategory, Tuple<int, int, double>> adjectiveCategories =
+            new Dictionary<AdjectiveCategory, Tuple<int, int, double>>()
+            {
+                { AdjectiveCategory.Strength,   Tuple.Create(0, 9, 0.30) },
+                { AdjectiveCategory.Dexterity,  Tuple.Create(10, 19, 0.30) },
+                { AdjectiveCategory.Magic,      Tuple.Create(20, 31, 0.15) },
+                { AdjectiveCategory.Tanky,      Tuple.Create(32, 36, 0.10) },
+                { AdjectiveCategory.Damage,     Tuple.Create(37, 41, 0.10) },
+                { AdjectiveCategory.Elemental,  Tuple.Create(42, 51, 0.05) },
+                { AdjectiveCategory.Mythical,   Tuple.Create(52, 58, 0.025) },
+                { AdjectiveCategory.Cursed,     Tuple.Create(59, 73, 0.025) }
+            };
         public static Dictionary<int, KeyValuePair<string, int[]>> AdjectiveModifiers
         {
             get { return _adjectiveModifiers; }
@@ -214,15 +238,37 @@ namespace Server.Custom.KoperPets
 
             return AdjectiveModifiers[petData.Adjective].Key;
         }
+        
         public static int GetRandomAdjective(KoperPetData newPet, BaseCreature oldPet)
         {
-            int index = GetRandomNumber();
+            /*int index = GetRandomNumber();
 
             if (AdjectiveModifiers.ContainsKey(index))
             {
                 //Console.WriteLine("Got adjective index");
                 return index;
             }
+            return 99;*/
+            
+            // Choose a category based on weighted random selection.
+            AdjectiveCategory chosenCategory = ChooseWeightedCategory();
+
+            // Get the index range for that category.
+            Tuple<int, int, double> range = adjectiveCategories[chosenCategory];
+            int start = range.Item1;
+            int end = range.Item2;
+            int rangeSize = end - start + 1;
+
+            // Pick a random index within that category.
+            int randomOffset = getrandom.Next(rangeSize);
+            int adjectiveIndex = start + randomOffset;
+
+            // Validate that the chosen key exists in the dictionary. (TODO is this needed?)
+            if (AdjectiveModifiers.ContainsKey(adjectiveIndex))
+            {
+                return adjectiveIndex;
+            }
+            // Fallback default if something goes wrong.
             return 99;
         }
 
@@ -259,13 +305,34 @@ namespace Server.Custom.KoperPets
 
             //Console.WriteLine("Applied Adjective");
         }
-
-        private static int GetRandomNumber()
+        
+        // outdated, saving for later
+        /*private static int GetRandomNumber()
         {
             lock (getrandom) // synchronize
             {
                 return getrandom.Next(0, AdjectiveModifiers.Count - 1); // do not include 99, fallback/default stats
             }
+        }*/
+        
+        private static AdjectiveCategory ChooseWeightedCategory()
+        {
+            // Calculate the total weight.
+            double totalWeight = adjectiveCategories.Values.Sum(v => v.Item3);
+
+            // Generate a random number between 0 and totalWeight.
+            double roll = getrandom.NextDouble() * totalWeight;
+            double cumulative = 0.0;
+
+            // Loop through the categories, summing their weights.
+            foreach (KeyValuePair<AdjectiveCategory, Tuple<int, int, double>> kvp in adjectiveCategories)
+            {
+                cumulative += kvp.Value.Item3;
+                if (roll < cumulative)
+                    return kvp.Key;
+            }
+            // Fallback in the unlikely event the loop doesn't return.
+            return AdjectiveCategory.Strength;
         }
 
         public static void RenamePet(BaseCreature pet, string adjective)
