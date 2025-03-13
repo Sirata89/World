@@ -18,10 +18,9 @@ Data/System/Source/httpRequests/
 Data/System/Source/dataSources/
 Data/System/Source/dataSources.local.xml
 Data/System/Source/.idea
-/.idea
-/.run
-/obj
+.idea
+.run
+obj
 Data/Data.bin
 Data/Data.hash
 Info/Scripts/Settings.cs
-/Saves
