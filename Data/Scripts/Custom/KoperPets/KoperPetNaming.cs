@@ -239,7 +239,7 @@ namespace Server.Custom.KoperPets
             return AdjectiveModifiers[petData.Adjective].Key;
         }
         
-        public static int GetRandomAdjective(KoperPetData newPet, BaseCreature oldPet)
+        public static int GetRandomAdjective()
         {
             /*int index = GetRandomNumber();
 
@@ -251,6 +251,7 @@ namespace Server.Custom.KoperPets
             return 99;*/
             
             // Choose a category based on weighted random selection.
+            Console.WriteLine("GetRandomAdjective started");
             AdjectiveCategory chosenCategory = ChooseWeightedCategory();
 
             // Get the index range for that category.
@@ -262,12 +263,14 @@ namespace Server.Custom.KoperPets
             // Pick a random index within that category.
             int randomOffset = getrandom.Next(rangeSize);
             int adjectiveIndex = start + randomOffset;
+            Console.WriteLine("Adjective index picked: " + adjectiveIndex);
 
             // Validate that the chosen key exists in the dictionary. (TODO is this needed?)
             if (AdjectiveModifiers.ContainsKey(adjectiveIndex))
             {
                 return adjectiveIndex;
             }
+            Console.WriteLine("Unknown adjective: " + adjectiveIndex);
             // Fallback default if something goes wrong.
             return 99;
         }

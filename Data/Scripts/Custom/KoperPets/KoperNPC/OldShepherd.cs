@@ -37,7 +37,7 @@ namespace Server.Custom.KoperPets
         public OldShepherd() : base("Old Shepherd")
         {
             Name = "Elias"; // Gives the NPC a name
-            Body = 0x190; // Male human
+            Body = 0x191; // human
             Hue = Utility.RandomSkinHue(); // Random skin tone
 
             // Set a classic shepherd outfit
@@ -53,8 +53,8 @@ namespace Server.Custom.KoperPets
             // Make NPC stand still and not wander
             CantWalk = true;
             this.Hidden = false;
-            //HairItemID = 0x203C;   // The ItemID of the hair you want
-            //HairHue = 1175;
+            HairItemID = 0x203C;   // The ItemID of the hair you want
+            HairHue = 1175;
         }
 
         public override void InitSBInfo(Mobile m)

@@ -85,8 +85,8 @@ namespace Server.Custom.KoperPets
 
             if (preAssignedData == null) // Tamed Pet Case
             {
-                newPetData.Adjective = KoperPetNaming.GetRandomAdjective(newPetData, pet);
-                newPetData.MaxLevel = 5;
+                newPetData.Adjective = KoperPetNaming.GetRandomAdjective();
+                //newPetData.MaxLevel = 5;
             }
 
             // Explicitly Set MaxLevel if PreAssigned
