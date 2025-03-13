@@ -369,6 +369,9 @@ namespace Server.SkillHandlers
 							m_Creature.Home = new Point3D(0, 0, 0);
 							m_Creature.FightMode = FightMode.Aggressor;
 							m_Creature.IsBonded = false;
+							#region KoperPets
+							Server.Custom.KoperPets.KoperPetManager.RegisterPet(m_Creature);
+							#endregion
 						}
 						else
 						{
