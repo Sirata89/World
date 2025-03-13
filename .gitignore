@@ -3,7 +3,10 @@ Data/System/Source/obj
 throttle.log
 Saves
 Game
+Backups
 Data/System/Source/bin
+Data/Obsolete
+Data/Scripts/Obsolete
 ﻿# Default ignored files
 Data/System/Source/shelf/
 Data/System/Source/workspace.xml
