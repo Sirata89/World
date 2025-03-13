@@ -27,11 +27,11 @@ namespace Server.Custom.KoperPets
                 { AdjectiveCategory.Strength,   Tuple.Create(0, 9, 0.30) },
                 { AdjectiveCategory.Dexterity,  Tuple.Create(10, 19, 0.30) },
                 { AdjectiveCategory.Magic,      Tuple.Create(20, 31, 0.15) },
-                { AdjectiveCategory.Tanky,      Tuple.Create(32, 36, 0.10) },
-                { AdjectiveCategory.Damage,     Tuple.Create(37, 41, 0.10) },
-                { AdjectiveCategory.Elemental,  Tuple.Create(42, 51, 0.05) },
-                { AdjectiveCategory.Mythical,   Tuple.Create(52, 58, 0.025) },
-                { AdjectiveCategory.Cursed,     Tuple.Create(59, 73, 0.025) }
+                { AdjectiveCategory.Tanky,      Tuple.Create(32, 36, 0.20) },
+                { AdjectiveCategory.Damage,     Tuple.Create(37, 41, 0.20) },
+                { AdjectiveCategory.Elemental,  Tuple.Create(42, 51, 0.15) },
+                { AdjectiveCategory.Mythical,   Tuple.Create(52, 58, 0.05) },
+                { AdjectiveCategory.Cursed,     Tuple.Create(59, 73, 0.075) }
             };
         public static Dictionary<int, KeyValuePair<string, int[]>> AdjectiveModifiers
         {
@@ -318,7 +318,11 @@ namespace Server.Custom.KoperPets
         private static AdjectiveCategory ChooseWeightedCategory()
         {
             // Calculate the total weight.
-            double totalWeight = adjectiveCategories.Values.Sum(v => v.Item3);
+            double totalWeight = 0.0;
+            foreach (Tuple<int, int, double> tuple in adjectiveCategories.Values)
+            {
+                totalWeight += tuple.Item3;
+            }
 
             // Generate a random number between 0 and totalWeight.
             double roll = getrandom.NextDouble() * totalWeight;

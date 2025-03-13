@@ -34,9 +34,9 @@ namespace Server.Custom.KoperPets
     {
         private static readonly Random random = new Random();
         private static int breedingScalar = 20; // TODO add as configurable setting
-        private static TimeSpan breedingCooldown = TimeSpan.FromMinutes(breedingScalar);
+        // private static TimeSpan breedingCooldown = TimeSpan.FromMinutes(breedingScalar);
         
-        public static TimeSpan BreedingCooldown { get { return breedingCooldown; } }
+        //public static TimeSpan BreedingCooldown { get { return breedingCooldown; } }
         private static int GetCategoryStart(int adjective)
         {
             if (adjective >= 0 && adjective <= 9) return 0;     // Strength
@@ -247,11 +247,12 @@ namespace Server.Custom.KoperPets
             if (petData == null) // Ensure pet data exists
                 return false;
 
-            if (DateTime.UtcNow - petData.LastBreedingTime < (breedingCooldown * (petData.Pedigree + 1))) // Uses updated cooldown
+            if (DateTime.UtcNow - petData.LastBreedingTime < GetBreedingCooldown(pet)) // Uses updated cooldown
                 return false; // Cooldown active
 
             return true; // Breeding allowed
         }
+
         public static bool TryBreed(BaseCreature parent1, BaseCreature parent2) // FIXME
         {
             if (!CanBreed(parent1) || !CanBreed(parent2))
@@ -284,6 +285,18 @@ namespace Server.Custom.KoperPets
 
             Console.WriteLine("[KoperPetManager] breeding cooldown started for " + pet.Name);
         }
+        
+        public static TimeSpan GetBreedingCooldown(BaseCreature pet)
+        {
+            KoperPetData petData = KoperPetManager.GetPetData(pet);
+            
+            if (petData == null)
+                return TimeSpan.Zero;
+            
+            TimeSpan breedingCooldown = TimeSpan.FromMinutes(breedingScalar * petData.Pedigree + 1);
+            
+            return breedingCooldown;
+        }
 
         public static TimeSpan GetRemainingBreedingCooldown(BaseCreature pet)
         {
@@ -295,7 +308,7 @@ namespace Server.Custom.KoperPets
                 return TimeSpan.Zero;
 
             TimeSpan timeElapsed = DateTime.UtcNow - petData.LastBreedingTime;
-            TimeSpan remainingCooldown = TimeSpan.FromMinutes((breedingScalar * (petData.Pedigree +1))) - timeElapsed;
+            TimeSpan remainingCooldown = GetBreedingCooldown(pet) - timeElapsed;
 
             return remainingCooldown > TimeSpan.Zero ? remainingCooldown : TimeSpan.Zero;
         }
